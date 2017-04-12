@@ -5,6 +5,7 @@ class CallbackController < ApplicationController
     value = params.fetch('rate', {})
     addrs = value.fetch('destination', {})
     items = value.fetch('items', [])
+    Rails.logger.debug("My object: #{items.inspect}")
 
     rates = shop.rates.includes(:conditions, :product_specific_prices).map do |rate|
       ContextualRate.new(rate, items, addrs)
