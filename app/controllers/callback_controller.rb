@@ -1,11 +1,14 @@
 class CallbackController < ApplicationController
-  skip_before_filter :verify_authenticity_token
+  skip_before_action :verify_authenticity_token
+
 
   def search
+
     value = params.fetch('rate', {})
     addrs = value.fetch('destination', {})
     items = value.fetch('items', [])
-    Rails.logger.debug("My object: #{items.inspect}")
+
+    # Rails.logger.debug("ORDER: #{@order_notes} #{@order_notes.inspect}")
 
     rates = shop.rates.includes(:conditions, :product_specific_prices).map do |rate|
       ContextualRate.new(rate, items, addrs)
@@ -25,4 +28,5 @@ class CallbackController < ApplicationController
   def shop
     @shop ||= Shop.find(params[:id])
   end
+
 end
