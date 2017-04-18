@@ -1,20 +1,24 @@
 class CallbackController < ApplicationController
   skip_before_action :verify_authenticity_token
 
+  #TODO: need to figure out how to reset the server side caching so that this method
+  # runs if the cart info is the same, but just the order notes change.
 
   def search
+    @test_order = CheckoutsUpdateJob.getOrder()
 
     value = params.fetch('rate', {})
     addrs = value.fetch('destination', {})
     items = value.fetch('items', [])
 
-    # Rails.logger.debug("ORDER: #{@order_notes} #{@order_notes.inspect}")
+    Rails.logger.info("[ORDER NOTES] #{@test_order.inspect}")
 
     rates = shop.rates.includes(:conditions, :product_specific_prices).map do |rate|
       ContextualRate.new(rate, items, addrs)
     end.select do |rate_instance|
       rate_instance.valid?
     end
+
 
     Rails.logger.info("[#{self.class.name}] #{rates.size} rates found")
 
