@@ -5,13 +5,13 @@ class CallbackController < ApplicationController
   # runs if the cart info is the same, but just the order notes change.
 
   def search
-    @test_order = CheckoutsUpdateJob.getOrder()
+    @order_notes = CheckoutsUpdateJob.getOrderNotes()
 
     value = params.fetch('rate', {})
     addrs = value.fetch('destination', {})
     items = value.fetch('items', [])
 
-    Rails.logger.info("[ORDER NOTES] #{@test_order.inspect}")
+    Rails.logger.info("[ORDER NOTES] #{@order_notes.inspect}")
 
     rates = shop.rates.includes(:conditions, :product_specific_prices).map do |rate|
       ContextualRate.new(rate, items, addrs)
