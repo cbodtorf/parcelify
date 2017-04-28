@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  get 'hello_world', to: 'hello_world#index'
   mount ShopifyApp::Engine, at: '/'
 
   post 'callback/:id', to: 'callback#search'

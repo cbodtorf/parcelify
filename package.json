@@ -1,13 +1,21 @@
 {
-  "name": "parcelify-polaris",
+  "name": "polaris-webpack-example",
   "private": true,
   "version": "1.0.0",
-  "description": "Parcelify with new Polaris UI using React components",
+  "description": "A Polaris example application using webpack",
   "main": "index.js",
+  "private": true,
+  "engines": {
+    "node": "6.9.0",
+    "npm": "4.1.1"
+  },
   "scripts": {
     "start": "webpack-dev-server",
     "prebuild": "rimraf ./build",
-    "build": "webpack"
+    "build": "webpack",
+    "postinstall": "cd client && yarn install",
+    "rails-server": "echo 'visit http://localhost:3000/hello_world' && foreman start -f Procfile.dev",
+    "test": "rspec"
   },
   "dependencies": {
     "@shopify/polaris": "^1.0.1",

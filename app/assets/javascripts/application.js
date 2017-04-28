@@ -1,3 +1,5 @@
+//= require webpack-bundle
+
 // This is a manifest file that'll be compiled into application.js, which will include all the files
 // listed below.
 //
@@ -37,7 +39,6 @@ $('body').on('click', '[data-condition-destroy]',  function (event) {
   var parent = $(event.target).closest("[data-condition]");
   parent.hide().find('input[type="hidden"]').attr('value', 1);
 });
-
 
 // Extras
 $('body').on('click', '[data-product_specific_price-add]', function (event) {
