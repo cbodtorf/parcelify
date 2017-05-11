@@ -18,6 +18,8 @@ import {
   ChoiceList,
   SettingToggle,
 } from '@shopify/polaris';
+import {EmbeddedApp, Alert, Modal} from '@shopify/polaris/embedded';
+
 import Filter from './Filter'
 import AdditionalCostPerItem from './AdditionalCostPerItem'
 
@@ -28,6 +30,7 @@ class Form extends Component {
     console.log('props', this.props);
 
     this.state = {
+      open: false,
       name: '',
       description: '',
       code: '',
@@ -44,7 +47,7 @@ class Form extends Component {
     };
   }
 
-  componentDidMount() {
+  componentWillMount() {
     /**
     * Need to iterate through props and reassign null values to undefined.
     * Then set state with updated props.
@@ -65,29 +68,32 @@ class Form extends Component {
   }
 
   render() {
+    console.log('render?', this.state);
     const breadcrumbs = [
       {content: 'Home'}
     ];
     const primaryAction = {content: 'Save', url: '/save'};
     const secondaryActions = [
-      {content: 'Help'},
-      {content: 'Cancel'},
+      {content: 'Help', onAction: () => this.setState({open: true})},
+      {content: 'Cancel', url: '/rates'}
     ];
 
     const choiceListItems = [
       {label: 'I accept the Terms of Service', value: 'false'},
       {label: 'I consent to receiving emails', value: 'false2'},
     ];
+
     const self = this
+
     const conditions = this.state.conditions.map(function(data, i){
       return (
-        <Filter key={i} id={i + 1} condition={data} matcher={self.props.matcher}/>
+        <Filter key={i} id={i + 1} onDelete={(id) => self.deleteCondition(id)} condition={data} matcher={self.props.matcher}/>
       );
     })
 
     const productSpecificPrices = this.state.productSpecificPrices.map(function(data, i){
       return (
-        <AdditionalCostPerItem key={i} id={i + 1} productSpecificPrice={data} matcher={self.props.matcher}/>
+        <AdditionalCostPerItem key={i} id={i + 1} onDelete={(id) => self.deleteProductSpecificPrice(id)} productSpecificPrice={data} matcher={self.props.matcher}/>
       );
     })
 
@@ -246,6 +252,20 @@ class Form extends Component {
           <Layout.Section>
             <FooterHelp>For more details on Bamboo, visit our site:<Link url="https://polaris.shopify.com"> E4 Consulting</Link>.</FooterHelp>
           </Layout.Section>
+          <Modal
+            src="/rates"
+            open={this.state.open}
+            title="Edit account information"
+            primaryAction={{
+              content: 'Update account',
+              onAction: () => this.setState({open: false}),
+            }}
+            secondaryActions={[{
+              content: 'Change account',
+              onAction: () => this.setState({open: false}),
+            }]}
+            onClose={() => this.setState({open: false})}
+          />
 
         </Layout>
       </Page>
@@ -283,7 +303,7 @@ class Form extends Component {
   productSpecificPrices() {
     return (
       <div>
-        "Add per-product price to rates. They're added once per item matching criterias."
+        Add per-product price to rates. They're added once per item matching criterias.
         <br />
         <br />
         <Button onClick={ this.addProductSpecificPrice() } primary>Add an Extra</Button>
@@ -293,12 +313,48 @@ class Form extends Component {
   conditions() {
     return (
       <div>
-        "Filters decide whether or not a rate is available. Countries and provinces use the ISO 3166-1 alpha-2 standard code. Filters are additive and compounded as ANDs. If you want ORs, use the | character to separate values. See our help for more details."
+        Filters decide whether or not a rate is available. Countries and provinces use the
+        <Link url="https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2"> ISO 3166-1 alpha-2 </Link>
+        standard code. Filters are additive and compounded as ANDs. If you want ORs, use the | character to separate values.
+        <Link url="https://github.com/christianblais/parcelify/blob/master/README.md">See our help for more details</Link>.
         <br />
         <br />
         <Button onClick={ this.addCondition() } primary>Add a filter</Button>
       </div>
     );
+  }
+  deleteCondition(id) {
+
+    console.log('heuh', id);
+    let conditions = this.state.conditions.map(function(condition, i) {
+      console.log('cid', condition.id);
+
+      if (condition.id !== id) {
+        // removed
+        return condition
+        console.log('returned condition', id);
+      }
+    })
+    // TODO: need to figure out why it is returning undefined?
+    if (conditions[0] === undefined) { conditions = []}
+    this.setState({conditions: conditions})
+  }
+
+  deleteProductSpecificPrice(id) {
+
+    console.log('heuh', id);
+    let productSpecificPrices = this.state.productSpecificPrices.map(function(productSpecificPrice, i) {
+      console.log('cid', productSpecificPrice.id);
+
+      if (productSpecificPrice.id !== id) {
+        // removed
+        return productSpecificPrice
+        console.log('returned productSpecificPrice', id);
+      }
+    })
+    // TODO: need to figure out why it is returning undefined?
+    if (productSpecificPrices[0] === undefined) { productSpecificPrices = []}
+    this.setState({productSpecificPrices: productSpecificPrices})
   }
 }
 

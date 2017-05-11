@@ -30,7 +30,8 @@ class Filter extends Component {
     }
   }
 
-  componentDidMount() {
+  componentWillMount() {
+    console.log('condish',this.props.condition);
     this.setState(this.props.condition)
   }
 
@@ -61,7 +62,7 @@ class Filter extends Component {
         title={"Filter " + this.props.id}
         actions={[{
             icon: 'delete',
-            onAction: console.log('click'),
+            onAction: () => this.props.onDelete(this.state.id),
         }]}
         >
         <FormLayout>

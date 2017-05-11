@@ -27,11 +27,11 @@ class AdditionalCostPerItem extends Component {
       field: '',
       verb: '',
       value: '',
-      priceToAfdd: ''
+      price: ''
     }
   }
 
-  componentDidMount() {
+  componentWillMount() {
     this.setState(this.props.productSpecificPrice)
   }
 
@@ -56,7 +56,7 @@ class AdditionalCostPerItem extends Component {
         title={'Additional Cost Per Item ' + this.props.id}
         actions={[{
             icon: 'delete',
-            onAction: console.log('click'),
+            onAction: () => this.props.onDelete(this.state.id),
         }]}
         >
         <FormLayout>
@@ -80,10 +80,10 @@ class AdditionalCostPerItem extends Component {
               onChange={this.valueUpdater('value')}
             />
             <TextField
-              value={this.state.priceToAfdd}
+              value={this.state.price}
               label="Price to add"
               placeholder=""
-              onChange={this.valueUpdater('priceToAfdd')}
+              onChange={this.valueUpdater('price')}
             />
           </FormLayout>
         </FormLayout>
