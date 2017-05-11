@@ -168,6 +168,8 @@
   </div>
 </div>
 
+<%= react_component("Index", props: { rates: @rates, shop: @shop }, prerender: false) %>
+
 <% content_for :shopify_app_javascript do %>
   ShopifyApp.Bar.initialize({
     title: 'Shipping Rates',

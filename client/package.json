@@ -27,6 +27,7 @@
     "react": "^15.5.4",
     "react-dom": "^15.5.4",
     "react-on-rails": "6.10.1",
+    "@shopify/polaris": "^1.0.1",
     "webpack": "^2.3.3"
   },
   "devDependencies": {

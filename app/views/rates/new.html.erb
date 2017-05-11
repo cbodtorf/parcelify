@@ -1,1 +1,18 @@
 <%= render 'form' %>
+
+<%= react_component(
+      "Form",
+      props: {
+        rate: @rate,
+        shop: @shop,
+        conditions: @rate.conditions,
+        productSpecificPrices: @rate.product_specific_prices,
+        matcher: {
+          productFields: Matcher::PRODUCT_FIELDS,
+          addressFields: Matcher::ADDRESS_FIELDS,
+          fields: Matcher::FIELDS,
+          verbs: Matcher::VERBS
+        }
+      },
+      prerender: false
+    ) %>
