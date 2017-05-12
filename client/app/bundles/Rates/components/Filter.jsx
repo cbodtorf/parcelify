@@ -1,38 +1,16 @@
 import React, {Component} from 'react';
 import {
-  Layout,
-  Page,
-  Stack,
-  FooterHelp,
   Card,
-  Link,
-  Button,
-  ButtonGroup,
-  Tag,
   Icon,
-  Badge,
   FormLayout,
   Select,
   TextField,
-  AccountConnection,
-  ChoiceList,
-  SettingToggle,
 } from '@shopify/polaris';
 
 class Filter extends Component {
-  constructor(props, railsContext) {
+  constructor(props) {
     super(props)
 
-    this.state = {
-      field: '',
-      verb: '',
-      value: ''
-    }
-  }
-
-  componentWillMount() {
-    console.log('condish',this.props.condition);
-    this.setState(this.props.condition)
   }
 
   render() {
@@ -59,31 +37,31 @@ class Filter extends Component {
     return (
       <Card
         sectioned
-        title={"Filter " + this.props.id}
+        title={`Filter ${this.props.id}`}
         actions={[{
             icon: 'delete',
-            onAction: () => this.props.onDelete(this.state.id),
+            onAction: () => this.props.onDelete(this.props.condition.id),
         }]}
         >
         <FormLayout>
           <FormLayout>
             <Select
-              value={this.state.field}
+              value={this.props.condition.field}
               label="Field"
               options={this.props.matcher.fields}
-              onChange={this.valueUpdater('field')}
+              onChange={this.props.conditionUpdate('field', this.props.condition.id)}
             />
             <Select
-              value={this.state.verb}
+              value={this.props.condition.verb}
               label="Verb"
               options={this.props.matcher.verbs}
-              onChange={this.valueUpdater('verb')}
+              onChange={this.props.conditionUpdate('verb', this.props.condition.id)}
             />
             <TextField
-              value={this.state.value}
+              value={this.props.condition.value}
               label="Value"
               placeholder=""
-              onChange={this.valueUpdater('value')}
+              onChange={this.props.conditionUpdate('value', this.props.condition.id)}
             />
           </FormLayout>
         </FormLayout>
@@ -91,9 +69,6 @@ class Filter extends Component {
     );
   }
 
-  valueUpdater(field) {
-    return (value) => this.setState({[field]: value});
-  }
 }
 
 export default Filter

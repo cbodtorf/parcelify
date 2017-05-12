@@ -1,42 +1,19 @@
 import React, {Component} from 'react';
 import {
-  Layout,
-  Page,
-  Stack,
-  FooterHelp,
   Card,
-  Link,
-  Button,
-  ButtonGroup,
-  Tag,
   Icon,
-  Badge,
   FormLayout,
   Select,
   TextField,
-  AccountConnection,
-  ChoiceList,
-  SettingToggle,
 } from '@shopify/polaris';
 
 class AdditionalCostPerItem extends Component {
-  constructor(props, railsContext) {
+  constructor(props) {
     super(props)
 
-    this.state = {
-      field: '',
-      verb: '',
-      value: '',
-      price: ''
-    }
-  }
-
-  componentWillMount() {
-    this.setState(this.props.productSpecificPrice)
   }
 
   render() {
-
     const fields = [
       'Product name',
       'Product SKU',
@@ -53,37 +30,37 @@ class AdditionalCostPerItem extends Component {
     return (
       <Card
         sectioned
-        title={'Additional Cost Per Item ' + this.props.id}
+        title={`Additional Cost Per Item ${this.props.id}`}
         actions={[{
             icon: 'delete',
-            onAction: () => this.props.onDelete(this.state.id),
+            onAction: () => this.props.onDelete(this.props.productSpecificPrice.id),
         }]}
         >
         <FormLayout>
           <FormLayout>
             <Select
-              value={this.state.field}
+              value={this.props.productSpecificPrice.field}
               label="Field"
               options={this.props.matcher.productFields}
-              onChange={this.valueUpdater('field')}
+              onChange={this.props.productSpecificPriceUpdate('field', this.props.productSpecificPrice.id)}
             />
             <Select
-              value={this.state.verb}
+              value={this.props.productSpecificPrice.verb}
               label="Verb"
               options={this.props.matcher.verbs}
-              onChange={this.valueUpdater('verb')}
+              onChange={this.props.productSpecificPriceUpdate('verb', this.props.productSpecificPrice.id)}
             />
             <TextField
-              value={this.state.value}
+              value={this.props.productSpecificPrice.value}
               label="Value"
               placeholder=""
-              onChange={this.valueUpdater('value')}
+              onChange={this.props.productSpecificPriceUpdate('value', this.props.productSpecificPrice.id)}
             />
             <TextField
-              value={this.state.price}
+              value={this.props.productSpecificPrice.price}
               label="Price to add"
               placeholder=""
-              onChange={this.valueUpdater('price')}
+              onChange={this.props.productSpecificPriceUpdate('price', this.props.productSpecificPrice.id)}
             />
           </FormLayout>
         </FormLayout>
@@ -91,9 +68,6 @@ class AdditionalCostPerItem extends Component {
     );
   }
 
-  valueUpdater(field) {
-    return (value) => this.setState({[field]: value});
-  }
 }
 
 export default AdditionalCostPerItem
